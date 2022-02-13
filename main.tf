@@ -1,3 +1,22 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+    random = {
+      source = "hashicorp/random"
+    }
+  }
+
+  cloud {
+    organization = "test-micahweston"
+
+    workspaces {
+      name = "serverless-api-micahweston"
+    }
+  }
+}
+
 provider "aws" {
   region = "us-west-2"
 }
