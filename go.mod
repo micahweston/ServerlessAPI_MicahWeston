@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/aws/aws-lambda-go v1.28.0
 	github.com/ipinfo/go/v2 v2.6.0
+	github.com/joho/godotenv v1.4.0
 )
 
 require (

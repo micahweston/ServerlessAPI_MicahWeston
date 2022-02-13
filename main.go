@@ -1,17 +1,16 @@
 package main
 
 import (
+	"os"
 	"context"
 	"encoding/json"
 	"log"
 	"net"
-
+	"github.com/joho/godotenv"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/ipinfo/go/v2/ipinfo"
 )
-
-var MY_TOKEN = "e76fe0d5c94275"
 
 type Response struct {
 	IP       string `json:"ipAddress"`
@@ -30,6 +29,13 @@ func main() {
 }
 
 func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// Getting local variables for testing purposes for token
+	err := godotenv.Load("local.env")
+	if err != nil {
+		log.Fatalf("Error occured. Err: %s", err)
+	}
+
+	token := os.Getenv("MY_TOKEN")
 
 	// Check if ipAddress is in queryStringParameters. If not return bad request response.
 	if request.QueryStringParameters["ipAddress"] == "" {
@@ -39,7 +45,7 @@ func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 
 	if request.HTTPMethod == "GET" {
 		ipAddress = request.QueryStringParameters["ipAddress"]
-		client := ipinfo.NewClient(nil, nil, MY_TOKEN)
+		client := ipinfo.NewClient(nil, nil, token)
 		info, err := client.GetIPInfo(net.ParseIP(ipAddress))
 
 		if err != nil {
